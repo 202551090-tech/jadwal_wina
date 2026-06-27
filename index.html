@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Harian Wina</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFB6C1">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FFF0F5;
+            --card-color: #ffffff;
+            --primary-color: #FFB6C1;
+            --accent-color: #D8BFD8;
+            --text-color: #6B5B52;
+            --success-color: #C1E1C1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: radial-gradient(#ffe4e1 20%, transparent 20%), radial-gradient(#e6e6fa 20%, transparent 20%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+
+        .container {
+            background: var(--card-color);
+            width: 100%;
+            max-width: 550px;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+            border: 4px solid #fff;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #FF8DA1;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px #FFF;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #A1887F;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .label-pilihan {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #FF8DA1;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        /* Form Input */
+        .input-section {
+            background: #FFF5F6;
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .row-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-box {
+            flex: 1;
+        }
+
+        input[type="text"], input[type="date"], input[type="time"], select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #FFE4E1;
+            border-radius: 15px;
+            outline: none;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            transition: 0.3s;
+            background-color: white;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px rgba(255, 182, 193, 0.5);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            filter: invert(0.6) sepia(1) saturate(5) hue-rotate(310deg);
+        }
+
+        .btn-add {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(255, 141, 161, 0.3);
+        }
+
+        .btn-add:hover {
+            background: #FF8DA1;
+            transform: translateY(-2px);
+        }
+
+        /* Kotak Memori */
+        .controls-section {
+            background: #FDF7F7;
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #FFE4E1;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 35px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23FF8DA1" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 12px center;
+        }
+
+        /* Tab Pembagi */
+        .tab-section {
+            display: flex;
+            background: #FAF6F0;
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 15px;
+            gap: 5px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 10px;
+            color: #A1887F;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #FF8DA1;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.2);
+        }
+
+        .tab-btn.searching-mode {
+            background: #FFE4E1 !important;
+            color: #FF6B8B !important;
+            cursor: not-allowed;
+        }
+
+        /* List Tampilan */
+        .todo-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .todo-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .todo-list::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 10px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #FAF6F0;
+            padding: 12px 15px;
+            border-radius: 18px;
+            border-left: 6px solid #D8BFD8;
+            transition: 0.3s;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .todo-item.event-type {
+            background: #FFF0F2;
+            border-left: 6px solid #FF6B8B;
+        }
+
+        .todo-item.completed {
+            background: #E8F5E9;
+            border-left-color: var(--success-color);
+            opacity: 0.7;
+        }
+
+        .todo-item.completed .task-text {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .left-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .checkbox-container {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            height: 22px;
+            width: 22px;
+            background-color: #fff;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .lock-icon {
+            font-size: 1.1rem;
+            width: 22px;
+            text-align: center;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .badges {
+            display: flex;
+            gap: 5px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .badge-date {
+            font-size: 0.75rem;
+            color: #FF8DA1;
+            background: #FFF5F6;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .badge-type {
+            font-size: 0.75rem;
+            color: white;
+            background: var(--accent-color);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .todo-item.event-type .badge-type {
+            background: #FF6B8B;
+        }
+
+        .task-time {
+            font-size: 0.8rem;
+            color: #9E9E9E;
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #FFB6C1;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.2s;
+            padding: 5px;
+        }
+
+        .btn-delete:hover {
+            color: #FF6B81;
+            transform: scale(1.1);
+        }
+
+        .empty-message {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #BDBDBD;
+            padding: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Jadwal Harian Wina ✨</h1>
+        <div class="subtitle">"Make everyday wonderful, Wina!"</div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <div class="row-inputs">
+                    <div class="input-box" style="flex: 2;">
+                        <span class="label-pilihan">Pilih Tipe Tulisan:</span>
+                        <select id="todoType" onchange="toggleTimeInput()">
+                            <option value="jadwal">⏰ Agenda Harian</option>
+                            <option value="kejadian">💖 Momen Spesial (Ulang Tahun, dll)</option>
+                        </select>
+                    </div>
+                    <div class="input-box" style="flex: 1;">
+                        <span class="label-pilihan">Tanggal:</span>
+                        <input type="date" id="dateInput">
+                    </div>
+                </div>
+
+                <span class="label-pilihan">Nama Agenda / Momen:</span>
+                <input type="text" id="taskInput" placeholder="Misal: 'Ulang Tahun Wina 🎉' atau 'Konser Musik 🎵'">
+                
+                <div class="input-box" id="timeInputWrapper">
+                    <span class="label-pilihan">Waktu Pengingat:</span>
+                    <input type="time" id="timeInput">
+                </div>
+            </div>
+            <button class="btn-add" onclick="addTask()">Catat Alur Hari Ini 🧸</button>
+        </div>
+
+        <div class="controls-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buka Kotak Memori... 🔍" oninput="handleSearch()">
+            </div>
+        </div>
+
+        <div class="tab-section" id="tabSection">
+            <button class="tab-btn active" id="tabJadwal" onclick="switchTab('jadwal')">⏰ Agenda Harian</button>
+            <button class="tab-btn" id="tabKejadian" onclick="switchTab('kejadian')">💖 Momen Spesial</button>
+        </div>
+
+        <ul class="todo-list" id="todoList"></ul>
+    </div>
+
+    <audio id="reminderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-120.wav" preload="auto"></audio>
+
+    <script>
+        // MEMASTIKAN SYSTEM OFFLINE TERDAFTAR
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("Aplikasi Siap Digunakan Secara Offline! ✨"))
+            .catch((e) => console.log("Gagal mendaftarkan offline sistem.", e));
+        }
+
+        let schedules = JSON.parse(localStorage.getItem('winaCodedSchedules')) || [];
+        let currentTab = 'jadwal';
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('dateInput').value = todayStr;
+
+        function saveToStorage() {
+            localStorage.setItem('winaCodedSchedules', JSON.stringify(schedules));
+        }
+
+        function toggleTimeInput() {
+            const type = document.getElementById('todoType').value;
+            const timeWrapper = document.getElementById('timeInputWrapper');
+            timeWrapper.style.display = (type === 'kejadian') ? 'none' : 'block';
+        }
+
+        function switchTab(tabName) {
+            const searchQuery = document.getElementById('searchInput').value.trim();
+            if (searchQuery !== '') return;
+
+            currentTab = tabName;
+            
+            document.getElementById('tabJadwal').classList.remove('active');
+            document.getElementById('tabKejadian').classList.remove('active');
+
+            if (tabName === 'jadwal') {
+                document.getElementById('tabJadwal').classList.add('active');
+            } else {
+                document.getElementById('tabKejadian').classList.add('active');
+            }
+
+            renderSchedules();
+        }
+
+        function handleSearch() {
+            const searchQuery = document.getElementById('searchInput').value.trim();
+            const tabJadwal = document.getElementById('tabJadwal');
+            const tabKejadian = document.getElementById('tabKejadian');
+
+            if (searchQuery !== '') {
+                tabJadwal.innerHTML = "🔍 Menampilkan";
+                tabKejadian.innerHTML = "Semua Memori";
+                tabJadwal.classList.add('searching-mode');
+                tabKejadian.classList.add('searching-mode');
+                tabJadwal.classList.remove('active');
+                tabKejadian.classList.remove('active');
+            } else {
+                tabJadwal.innerHTML = "⏰ Agenda Harian";
+                tabKejadian.innerHTML = "💖 Momen Spesial";
+                tabJadwal.classList.remove('searching-mode');
+                tabKejadian.classList.remove('searching-mode');
+                switchTab(currentTab);
+                return;
+            }
+
+            renderSchedules();
+        }
+
+        function formatDateIndo(dateStr) {
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            return new Date(dateStr).toLocaleDateString('id-ID', options);
+        }
+
+        function renderSchedules() {
+            const todoList = document.getElementById('todoList');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            todoList.innerHTML = '';
+            let filtered = [];
+
+            if (searchQuery !== '') {
+                filtered = schedules.filter(item => item.task.toLowerCase().includes(searchQuery));
+            } else {
+                filtered = schedules.filter(item => item.type === currentTab);
+            }
+
+            filtered.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+
+            if (filtered.length === 0) {
+                todoList.innerHTML = `<div class="empty-message">Kotak ini masih kosong, Wina... 🐰⭐</div>`;
+                return;
+            }
+
+            filtered.forEach((item) => {
+                const li = document.createElement('li');
+                li.className = `todo-item ${item.type === 'kejadian' ? 'event-type' : ''} ${item.completed ? 'completed' : ''}`;
+
+                const displayTime = item.type === 'jadwal' ? `⏰ Jam ${item.time}` : `📆 Seharian`;
+                const typeLabel = item.type === 'jadwal' ? `Agenda` : `Spesial`;
+
+                let leftContentArea = '';
+                if (item.type === 'kejadian') {
+                    leftContentArea = `<span class="lock-icon">📌</span>`;
+                } else {
+                    leftContentArea = `
+                        <label class="checkbox-container">
+                            <input type="checkbox" ${item.completed ? 'checked' : ''} onclick="toggleComplete('${item.id}')">
+                            <span class="checkmark"></span>
+                        </label>
+                    `;
+                }
+
+                li.innerHTML = `
+                    <div class="left-content">
+                        ${leftContentArea}
+                        <div class="details">
+                            <span class="task-text">${item.task}</span>
+                            <div class="badges">
+                                <span class="badge-date">📅 ${formatDateIndo(item.date)}</span>
+                                <span class="badge-type">${typeLabel}</span>
+                                <span class="task-time">${displayTime} ${item.reminded ? '(Sudah Diingatkan)' : ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-delete" onclick="deleteTask('${item.id}')">💖</button>
+                `;
+                todoList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            const typeInput = document.getElementById('todoType');
+            const taskInput = document.getElementById('taskInput');
+            const dateInput = document.getElementById('dateInput');
+            const timeInput = document.getElementById('timeInput');
+
+            if (taskInput.value.trim() === '' || dateInput.value === '') {
+                alert('Wina, lengkapi datanya dulu ya! 🥰');
+                return;
+            }
+            if (typeInput.value === 'jadwal' && timeInput.value === '') {
+                alert('Tentukan waktu pengingatnya dulu, Wina! ⏰');
+                return;
+            }
+
+            const newSchedule = {
+                id: 'id_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                type: typeInput.value,
+                task: taskInput.value,
+                date: dateInput.value,
+                time: typeInput.value === 'jadwal' ? timeInput.value : '00:00',
+                completed: false,
+                reminded: false
+            };
+
+            schedules.push(newSchedule);
+            saveToStorage();
+            
+            document.getElementById('searchInput').value = '';
+            handleSearch();
+            switchTab(typeInput.value);
+
+            taskInput.value = '';
+            timeInput.value = '';
+        }
+
+        function toggleComplete(id) {
+            const index = schedules.findIndex(item => item.id === id);
+            if(index !== -1 && schedules[index].type !== 'kejadian') {
+                schedules[index].completed = !schedules[index].completed;
+                saveToStorage();
+                renderSchedules();
+            }
+        }
+
+        function deleteTask(id) {
+            schedules = schedules.filter(item => item.id !== id);
+            saveToStorage();
+            renderSchedules();
+        }
+
+        setInterval(() => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const currentDateStr = `${year}-${month}-${day}`;
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const currentTimeStr = `${hours}:${minutes}`;
+
+            schedules.forEach((item) => {
+                if (item.type === 'jadwal' && item.date === currentDateStr && item.time === currentTimeStr && !item.completed && !item.reminded) {
+                    item.reminded = true; 
+                    saveToStorage();
+                    renderSchedules();
+
+                    const sound = document.getElementById('reminderSound');
+                    sound.play().catch(e => console.log("Audio aktif."));
+
+                    alert(`✨ Pengingat Agenda Wina! ✨\nHari ini jam ${item.time}, waktunya:\n"${item.task}"`);
+                }
+            });
+        }, 1000);
+
+        renderSchedules();
+    </script>
+</body>
+</html>
